@@ -1,0 +1,32 @@
+name: ebflow
+channels:
+  - defaults
+  - conda-forge
+  - pytorch
+dependencies:
+  - tensorflow
+  - python=3.7
+  - torchvision=0.8.1
+  - cudatoolkit=11.0
+  - pytorch=1.7.0
+  - cython
+  - matplotlib
+  - scikit-learn
+  - tensorboard==2.4.0
+  - absl-py==0.10.0
+  - ninja
+  - scipy
+  - numpy
+  - seaborn
+  - pandas
+  - jax
+  - jaxlib
+  - celluloid
+  - pip:
+    - ml-collections==0.1.0
+    - tensorflow-probability==0.12
+    - tensorflow_datasets==3.1.0
+    - tensorflow-addons==0.12.0
+    - tensorflow_io
+    - torchviz
+    - tensorflow-gan==2.0.0
