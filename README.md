@@ -1,5 +1,6 @@
 # Training Energy-Based Normalizing Flow with Score-Matching Objectives
-[![arXiv](https://img.shields.io/badge/arXiv-2305.15267-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/2305.15267)<br>
+[![arXiv](https://img.shields.io/badge/arXiv-2305.15267-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/2305.15267)
+[![YouTube](https://img.shields.io/badge/YouTube-ff0101?logo=youtube&style=flat-square)](https://youtu.be/3IPZhTumzM0)
 
 This repository contains the code implementation of the experiments presented in the paper [*Training Energy-Based Normalizing Flow with Score-Matching Objectives*](https://arxiv.org/abs/2305.15267).
 
