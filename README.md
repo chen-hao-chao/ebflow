@@ -9,6 +9,8 @@ This repository contains the code implementation of the experiments presented in
   <img src="assets/ebflow.png" alt="ebflow" width="60%">
 </p>
 
+The project page is available at: <https://chen-hao-chao.github.io/ebflow/>
+
 ## Directory Structure
 - Use the code in [ebflow/toy_examples](/toy_examples) to reproduce the results presented in **Sections 5.1 and A5**.
 - Use the code in [ebflow/real_world](/real_world) to reproduce the results presented in **Sections 5.2, 5.3, and 5.4**.
