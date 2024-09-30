@@ -30,13 +30,30 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$','$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'ams',
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  
+    window.addEventListener('load', (event) => {
+        document.querySelectorAll("mjx-container").forEach(function(x){
+          x.parentElement.classList += 'has-jax'})
+      });
+  
   </script>
-  <script type="text/javascript"
-    src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
-
 </head>
 
 <body>
@@ -197,7 +214,7 @@
     <div class="columns is-centered has-text-centered">
       <div class="content has-text-justified scroll-wrapper">
         <p>This blog post offers an introduction to our proposed EBFlow modeling method. 
-          The contents are essentially the same as our paper, but some sections have been removed for conciseness.
+          <!-- The contents are essentially the same as our paper, but some sections have been removed for conciseness. -->
           We begin with an overview of flow-based and energy-based models.
           Then, we explore the connections between these models by introducing EBFlow. 
           Next, we present experimental results to demonstrate the effectiveness of the proposed method. 
@@ -233,7 +250,7 @@
           of such model architectures include Generative Flows (Glow) and Neural Spline Flows (NSF) models.</p>
         <p>Given the parameterization of $p(\cdot\,;\theta)$, a commonly used approach for optimizing $\theta$ is maximum likelihood (ML) estimation, which involves minimizing the Kullback-Leibler (KL) divergence
           $\mathbb{D}_{KL}[p_{\mathbf{x}}(\cdot) \| p(\cdot\,;\theta)]$. The ML objective $L_{ML}(\theta)$ is derived by removing a constant term from $\mathbb{D}_{KL}[p_{\mathbf{x}}(\cdot) \| p(\cdot\,;\theta)]$, and can be expressed as follows:</p>
-        <p class="has-text-centered">$$L_{ML}(\theta)=\mathbb{E}_{p_{\mathbf{x}}}[-\log p(\mathbf{x};\theta)].$$</p>
+        <p class="has-text-centered">$$L_{ML}(\theta)=\mathbb{E}_{p_{\mathbf{x}}(\mathbf{x})}[-\log p(\mathbf{x};\theta)].$$</p>
         <p>The ML objective explicitly evaluates $p(\mathbf{x};\theta)$, which indicates that model architectures containing layers with dense $\mathbf{J}_{g_i}$ may encounter training inefficiency due to the $O(D^3L)$ cost of the Jacobian determinant products.
           Although a number of alternative methods (e.g., lower-triangular designs and the relative gradient method) can be adopted to reduce the computational cost, they either require additional constraints on the transformation or biased estimation on the gradients of the ML objective.</p>
 
@@ -272,11 +289,11 @@
       <div class="content has-text-justified scroll-wrapper">
         <p>Our key observation is that the parametric density function of a flow-based model can be reinterpreted as that of an energy-based model through identifying 
           the input-independent multipliers in $p(\cdot\,;\theta)$. Specifically, $p(\cdot\,;\theta)$ can be explicitly factorized into an unnormalized density and a corresponding normalizing term as follows:</p>
-        <p class="has-text-centered">$$p(\mathbf{x};\theta) = p_{\mathbf{u}}(g(\mathbf{x};\theta)) \prod_{i\in S_n} \left| \det( \mathbf{J}_{g_i}(\mathbf{x}_{i-1};\theta)) \right| \color{blue}{\prod_{i\in S_l} \left| \det( \mathbf{J}_{g_i}(\theta)) \right|} \triangleq \exp (-E(\mathbf{x};\theta)) \color{blue}{Z^{-1}(\theta)}.$$</p>
-        <p>The terms highlighted in blue represent the normalizing constant of $p(\mathbf{x};\theta)$, while the corresponding energy function $E(\mathbf{x};\theta)$ can be represented as follows:</p>
+        <p class="has-text-centered">$$p(\mathbf{x};\theta) = \underbrace{p_{\mathbf{u}}(g(\mathbf{x};\theta)) \prod_{i\in S_n} \left| \det( \mathbf{J}_{g_i}(\mathbf{x}_{i-1};\theta)) \right|}_{\text{unnorm. density}} \underbrace{\prod_{i\in S_l} \left| \det( \mathbf{J}_{g_i}(\theta)) \right|}_{\text{norm. const.}} \triangleq \underbrace{\exp (-E(\mathbf{x};\theta))}_{\text{unnorm. density}} \underbrace{Z^{-1}(\theta)}_{\text{norm. const.}}.$$</p>
+        <p>The energy function $E(\mathbf{x};\theta)$ of $p(\mathbf{x};\theta)$ is represented as follows:</p>
         <p class="has-text-centered">$$E(\mathbf{x};\theta)=-\log \left( p_{\mathbf{u}}(g(\mathbf{x};\theta)) \prod_{i\in S_n} \left| \det( \mathbf{J}_{g_i}(\mathbf{x}_{i-1};\theta)) \right| \right).$$</p>
         <p>This formulation essentially conveys the following:</p>
-        <p class="has-text-centered" style="font-style: italic;">"Any flow-based model can be treated as an energy-based model with </br> a normalizing constant $Z(\theta)=\prod_{i\in S_l} \left| \det( \mathbf{J}_{g_i}(\theta)) \right|^{-1}$ and an associated sampler $g^{-1}(\mathbf{u};\theta),\,\mathbf{u}\sim p_{\mathbf{u}}$."</p>
+        <p class="has-text-centered" style="font-style: italic; text-align: center;">"Any flow-based model can be treated as an energy-based model with </br> a normalizing constant $Z(\theta)=\prod_{i\in S_l} \left| \det( \mathbf{J}_{g_i}(\theta)) \right|^{-1}$ and an associated sampler $g^{-1}(\mathbf{u};\theta),\,\mathbf{u}\sim p_{\mathbf{u}}$."</p>
         <p>&#9654<b>Training Cost:</b> From a computational perspective, this property can be utilized to isolate the Jacobian determinant product of linear transformations as a normalizing constant $Z(\theta)$. This allows the use of energy-based training methods, such as score-matching methods (i.e., SSM, FDSSM, and DSM), to optimize $p(\cdot\,;\theta)$ without directly calculating $Z(\theta)$.
           Under this optimization strategy, a flow-based model can be constructed using linear transformations with dense Jacobians (e.g., convolutional and fully-connected layers) while preserving optimization efficiency.
           As a result, modern architectures such as Glow and NSF can be optimized efficiently without constraints (e.g., masking) on their linear layers.</p>
@@ -323,7 +340,7 @@
           CIFAR-10 ($D = 3 \times 32 \times 32$) datasets. The first model architecture is exactly the same as that adopted by [7]. It is an architecture consisting of two fully-connected layers and a smoothed leaky ReLU non-linear layer in between. The second
           model is a parametrically efficient variant of the first model. It replaces the fully-connected layers with convolutional layers and increases the depth of the model to six convolutional blocks. Between
           every two convolutional blocks, a squeeze operation is inserted to enlarge the receptive field. In the following paragraphs, we refer to these models as ‘FC-based’ and ‘CNN-based’ models, respectively.</p>
-        <p class="has-text-centered" style="font-style: italic;"><img src="./static/images/runtime_efficiency.png" style="width:650pt;"/></br>
+          <p style="font-style: italic; text-align: center;"><img src="./static/images/runtime_efficiency.png" class="center" style="width:650pt;"/></br>
           <b>Figure 2.</b> (a) A runtime comparison of calculating the gradients of different objectives for different input sizes ($D$). The input sizes are $(1, n, n)$ and $(3, n, n)$, with the x-axis in the figures representing
           $n$. In the format $(c, h, w)$, the first value indicates the number of channels, while the remaining values correspond to the height and width of the input data. The curves depict the evaluation results in terms
           of the mean of three independent runs. (b) A comparison of the training efficiency of the FC-based and CNN-based models evaluated on the validation set of MNIST and CIFAR-10. Each curve and
@@ -336,7 +353,7 @@
           as revealed for the scenario of training CNN-based models on the CIFAR-10 dataset. These experimental results provide evidence to support the use of score-matching methods for optimizing EBFlow.</p>
         <p>&#9654<b>Application to Generation Tasks:</b> The sampling process of EBFlow can be accomplished through the inverse function or an MCMC process. The former is a typical generation method adopted by flow-based models, while the latter is
           a more flexible sampling process that allows conditional generation without re-training the model. In the following paragraphs, we provide detailed explanations and visualized results of these tasks</p>
-        <p class="has-text-centered" style="font-style: italic;"><img src="./static/images/gen_samples.png" style="width:600pt;"/></br>
+        <p class="has-text-centered" style="font-style: italic;text-align: center;"><img src="./static/images/gen_samples.png" style="width:600pt;"/></br>
           <b>Figure 3.</b> (Left) A qualitative comparison between (a) our model (NLL=728) and (b) the model in [12] (NLL=1,637) on the inverse generation task.
           (Right) A qualitative demonstration of the FC-based odel trained using $L_{DSM}$ on the data imputation task.</p>
         <p><b>Inverse Generation:</b> One characteristic of flow-based models is that $g^{-1}$ can be directly adopted as a generator In this experiment, we adopt the Glow model architecture and train it using our method with $L_{SSM}$ on the MNIST dataset. 
@@ -375,13 +392,13 @@
           determinant estimation for matrices, we refer readers to Section I of [15], where a more sophisticated
           approximation approach and the corresponding experimental findings are provided.</p>
 
-        <p>&#9654<b>Reinforcement Learning:</b> Our recent work <a href="https://arxiv.org/abs/2405.13629">Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow</a> shows that EBFlow can be applied in the Soft Actor-Critic (SAC) [16] framework to model the reinforcement learning (RL) agent.
+        <p>&#9654<b>Reinforcement Learning:</b> Our extension research <a href="https://arxiv.org/abs/2405.13629">Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow</a> [16] shows that EBFlow can be applied in the Soft Actor-Critic (SAC) [17] framework to model the reinforcement learning (RL) agent.
           In this work, we introduce a new Maximum Entropy (MaxEnt) RL framework modeled as follows:</p>
         <p class="has-text-centered">$$\pi(\mathbf{a}|\mathbf{s})=p_{\mathbf{u}}(g_{\theta}(\mathbf{a}|\mathbf{s})) \prod_{i\in S_n} \left| \det( \mathbf{J}_{g^i_{\theta}}(\mathbf{a}^{i-1}|\mathbf{s})) \right| \prod_{i\in S_l} \left| \det( \mathbf{J}_{g^i_{\theta}}(\mathbf{s})) \right| \triangleq \exp \left(\frac{1}{\alpha} Q_{\theta}(\mathbf{s},\mathbf{a})\right) \exp \left(\frac{1}{\alpha} V_{\theta}(\mathbf{s})\right).$$</p>
         <p>This framework integrates the policy evaluation steps and the policy improvement steps,
           resulting in an elegant single-objective training process. Our method enables the calculation of the soft value function used in the policy evaluation target without Monte Carlo approximation.
           To evaluate the performance of our method, we conducted experiments on the MuJoCo benchmark suite and a number of high-dimensional robotic tasks simulated by Omniverse
-          Isaac Gym. The evaluation results demonstrate that our method achieves superior performance compared to widely-adopted representative baselines. We refer the readers to <a href="">this project page</a> for more details.</p>
+          Isaac Gym. The evaluation results demonstrate that our method achieves superior performance compared to widely-adopted representative baselines. We refer the readers to <a href="https://ChienFeng-hub.github.io/meow/">this project page</a> for more details.</p>
       </div>
     </div>
 </section>
@@ -439,8 +456,10 @@
       Computer Vision and Pattern Recognition (CVPR), 2016.</p>
     <p>[15] J. Sohl-Dickstein. Two Equalities Expressing the Determinant of a Matrix in terms of Expectations
       over Matrix-Vector Products, 2020.</p>
-    <p>[16] T. Haarnoja, A. Zhou, P. Abbeel, and S. Levine. Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. In Proceedings of
-      the International Conference on Machine Learning (ICML), 2017.</p>
+    <p>[16] C.-H. Chao, C. Feng, W.-F. Sun, C.-K. Lee, S. See, C.-Y. Lee. Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow. In Proc. Conf. on Neural Information Processing Systems
+      (NeurIPS), 2024.</p>
+    <p>[17] T. Haarnoja, A. Zhou, P. Abbeel, and S. Levine. Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. In Proceedings of
+        the International Conference on Machine Learning (ICML), 2017.</p>
   </div>
 </section>
 
