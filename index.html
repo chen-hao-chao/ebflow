@@ -265,7 +265,7 @@
           evaluating the gradients of the energy function numerous times.</p>
         <p>Another line of researches proposed to optimize $p(\cdot\,;\theta)$ through minimizing the Fisher divergence $\mathbb{D}_{F}[p_{\mathbf{x}}(\cdot) \| p(\cdot\,;\theta)]$ using the score-matching
           (SM) <a href="#Ref10">[10]</a> objective $L_{SM}(\theta)=\mathbb{E}_{p_{\mathbf{x}}(\mathbf{x})}[\frac{1}{2} \| \frac{\partial}{\partial \mathbf{x}} E(\mathbf{x};\theta) + Tr(\frac{\partial^2}{\partial \mathbf{x}^2} E(\mathbf{x};\theta)) \|^2]$ to avoid the explicit calculation of $Z(\theta)$ as well as the sampling process required in $L_{\text{SML}}(\theta)$. Several computationally
-          efficient variants of $L_{SM}(\theta)$, including sliced score matching (SSM) <a href="#Ref11">[11]</a>, finite difference sliced score matching (FDSSM) [12], and denoising score matching (DSM) <a href="#Ref13">[13]</a>, have been proposed.</p>
+          efficient variants of $L_{SM}(\theta)$, including sliced score matching (SSM) <a href="#Ref11">[11]</a>, finite difference sliced score matching (FDSSM) <a href="#Ref12">[12]</a>, and denoising score matching (DSM) <a href="#Ref13">[13]</a>, have been proposed.</p>
         <p><b>SSM</b> is derived directly based on $L_{SM}(\theta)$ with an unbiased Hutchinson’s trace estimator. Given a random projection vector $\mathbf{v}\in \mathbb{R}^D$ drawn from $p_\mathbf{v}$ and satisfying $\mathbb{E}_{p_{\mathbf{v}}(\mathbf{v})}[\mathbf{v}^T \mathbf{v}] = I$, the objective
           function denoted as $L_{SSM}(\theta)$, is defined as follows:</p>
         <p class="has-text-centered">$$L_{SSM}(\theta)=\mathbb{E}_{p_{\mathbf{x}}(\mathbf{x})} \left[\frac{1}{2} \left\| \frac{\partial}{\partial \mathbf{x}} E(\mathbf{x};\theta) + \mathbf{v}^T\frac{\partial^2}{\partial \mathbf{x}^2} E(\mathbf{x};\theta)\mathbf{v} \right\|^2\right].$$</p>
@@ -337,7 +337,7 @@
         
         <p>&#9654<b>Efficiency Evaluation on the MNIST and CIFAR-10 Datasets:</b> In this section, we inspect the influence of data dimension $D$ on the training efficiency of flow-based
           models. To provide a thorough comparison, we employ two types of model architectures and train them on two datasets with different data dimensions: the MNIST ($D = 1 \times 28 \times 28$) and
-          CIFAR-10 ($D = 3 \times 32 \times 32$) datasets. The first model architecture is exactly the same as that adopted by [7]. It is an architecture consisting of two fully-connected layers and a smoothed leaky ReLU non-linear layer in between. The second
+          CIFAR-10 ($D = 3 \times 32 \times 32$) datasets. The first model architecture is exactly the same as that adopted by <a href="#Ref7">[7]</a>. It is an architecture consisting of two fully-connected layers and a smoothed leaky ReLU non-linear layer in between. The second
           model is a parametrically efficient variant of the first model. It replaces the fully-connected layers with convolutional layers and increases the depth of the model to six convolutional blocks. Between
           every two convolutional blocks, a squeeze operation is inserted to enlarge the receptive field. In the following paragraphs, we refer to these models as ‘FC-based’ and ‘CNN-based’ models, respectively.</p>
           <p style="font-style: italic; text-align: center;"><img src="./static/images/runtime_efficiency.png" class="center" style="width:650pt;"/></br>
