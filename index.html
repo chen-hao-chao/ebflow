@@ -303,7 +303,7 @@
           property is essential in ensuring the convergence accuracy of the parameters. Let $N$ be the number of independent and identically distributed (i.i.d.) samples drawn from $p_{\mathbf{x}}$ to approximate the
           expectation in the SM objective. In addition, assume that there exists a set of optimal parameters $\theta^{*}$ such that $p(\mathbf{x}; \theta^{*}) = p_{\mathbf{x}}(\mathbf{x})$. Under some regularity conditions, 
           <i style="font-style: italic;">consistency</i> guarantees that the parameters $\theta_N$ minimizing the SM loss converges (in probability) to its optimal value $\theta^{*}$ when $N \to \infty$, i.e., $\theta_N \to \theta^{*}$ as $N\to \infty$.</p>
-        <p>&#9654<b>The Match-after-Preprocessing (MaP) Technique:</b> As revealed in the recent studies [11, 12], training flow-based models with score-matching objectives
+        <p>&#9654<b>The Match-after-Preprocessing (MaP) Technique:</b> As revealed in the recent studies <a href="#Ref11">[11,12]</a>, training flow-based models with score-matching objectives
           is challenging as the training process is numerically unstable and usually exhibits significant variances. To address these issues, we propose to adopt the MaP technique.
           Score-matching methods rely on the score function $-\frac{\partial}{\partial \mathbf{x}}E(\mathbf{x}; \theta)$ to match $\frac{\partial}{\partial \mathbf{x}} \log p_{\mathbf{x}}(\mathbf{x})$, which
           requires backward propagation through each layer in $g$. This indicates that the training process could be numerically sensitive to the derivatives of $g$. For instance, logit pre-processing layers
@@ -330,9 +330,9 @@
           formed using Gaussian smoothing kernels to ensure $p_{\mathbf{x}}(\mathbf{x})$ is continuous and the true score function is well defined. The model $g(\cdot\,;\theta)$ is
           constructed using the Glow model architecture, which consists of actnorm layers, affine coupling layers, and fully-connected layers. The performance
           are evaluated in terms of the KL divergence and the Fisher divergence using i.i.d. testing sample points.</p>
-        <p class="has-text-centered" style="font-style: italic;"><img src="./static/images/toy.png" style="width:300pt;"/></br>
+        <p id="Fig1" class="has-text-centered" style="font-style: italic;"><img src="./static/images/toy.png" style="width:300pt;"/></br>
           <b>Figure 1.</b> The visualized density functions on the Sine, Swirl, and Checkerboard datasets. The column ‘True’ illustrates the visualization of the true density functions.</p>
-        <p>Fig. 1 demonstrates the results of the above setting. The results show that the pdf estimated by EBFlow trained with score-matching methods (i.e., SSM, FDSSM, and DSM) is on par with those
+        <p><a href="#Fig1">Fig. 1</a> demonstrates the results of the above setting. The results show that the pdf estimated by EBFlow trained with score-matching methods (i.e., SSM, FDSSM, and DSM) is on par with those
           trained using maximum likelihood methods (i.e., SML and ML). These results validate the efficacy of training EBFlow with score matching.</p>
         
         <p>&#9654<b>Efficiency Evaluation on the MNIST and CIFAR-10 Datasets:</b> In this section, we inspect the influence of data dimension $D$ on the training efficiency of flow-based
@@ -340,25 +340,25 @@
           CIFAR-10 ($D = 3 \times 32 \times 32$) datasets. The first model architecture is exactly the same as that adopted by <a href="#Ref7">[7]</a>. It is an architecture consisting of two fully-connected layers and a smoothed leaky ReLU non-linear layer in between. The second
           model is a parametrically efficient variant of the first model. It replaces the fully-connected layers with convolutional layers and increases the depth of the model to six convolutional blocks. Between
           every two convolutional blocks, a squeeze operation is inserted to enlarge the receptive field. In the following paragraphs, we refer to these models as ‘FC-based’ and ‘CNN-based’ models, respectively.</p>
-          <p style="font-style: italic; text-align: center;"><img src="./static/images/runtime_efficiency.png" class="center" style="width:650pt;"/></br>
+          <p id="Fig2" style="font-style: italic; text-align: center;"><img src="./static/images/runtime_efficiency.png" class="center" style="width:650pt;"/></br>
           <b>Figure 2.</b> (a) A runtime comparison of calculating the gradients of different objectives for different input sizes ($D$). The input sizes are $(1, n, n)$ and $(3, n, n)$, with the x-axis in the figures representing
           $n$. In the format $(c, h, w)$, the first value indicates the number of channels, while the remaining values correspond to the height and width of the input data. The curves depict the evaluation results in terms
           of the mean of three independent runs. (b) A comparison of the training efficiency of the FC-based and CNN-based models evaluated on the validation set of MNIST and CIFAR-10. Each curve and
           the corresponding shaded area depict the mean and confidence interval of three independent runs.</p>
         <p>To demonstrate the scalability of KL-divergence-based (i.e., $L_{ML}$ and $L_{SML}$) and Fisher divergence-based (i.e., $L_{SSM}$, $L_{DSM}$, and $L_{FDSSM}$) objectives used in EBFlow and the baseline
-          method, we first present a runtime comparison for different choices of the input data size $D$. The results presented in Fig. 2 (a) reveal that Fisher-divergence-based objectives can be computed more
+          method, we first present a runtime comparison for different choices of the input data size $D$. The results presented in <a href="#Fig2">Fig. 2</a> (a) reveal that Fisher-divergence-based objectives can be computed more
           efficiently than KL-divergence-based objectives. Moreover, the sampling-based objective $L_{SML}$ used in EBFlow, which excludes the calculation of $Z(\theta)$ in the computational graph, can be computed
-          slightly faster than $L_{ML}$ adopted by the baseline. Fig. 2 (b) presents the trends of NLL versus training wall time when $L_{ML}$, $L_{SML}$, $L_{SSM}$, $L_{DSM}$, and $L_{FDSSM}$ are adopted as the objectives. 
+          slightly faster than $L_{ML}$ adopted by the baseline. <a href="#Fig2">Fig. 2</a> (b) presents the trends of NLL versus training wall time when $L_{ML}$, $L_{SML}$, $L_{SSM}$, $L_{DSM}$, and $L_{FDSSM}$ are adopted as the objectives. 
           It is observed that EBFlow trained with SSM and DSM consistently attain better NLL in the early stages of the training. The improvement is especially notable when both $D$ and $L$ are large, 
           as revealed for the scenario of training CNN-based models on the CIFAR-10 dataset. These experimental results provide evidence to support the use of score-matching methods for optimizing EBFlow.</p>
         <p>&#9654<b>Application to Generation Tasks:</b> The sampling process of EBFlow can be accomplished through the inverse function or an MCMC process. The former is a typical generation method adopted by flow-based models, while the latter is
           a more flexible sampling process that allows conditional generation without re-training the model. In the following paragraphs, we provide detailed explanations and visualized results of these tasks</p>
-        <p class="has-text-centered" style="font-style: italic;text-align: center;"><img src="./static/images/gen_samples.png" style="width:600pt;"/></br>
+        <p id="Fig3" class="has-text-centered" style="font-style: italic;text-align: center;"><img src="./static/images/gen_samples.png" style="width:600pt;"/></br>
           <b>Figure 3.</b> (Left) A qualitative comparison between (a) our model (NLL=728) and (b) the model in <a href="#Ref12">[12]</a> (NLL=1,637) on the inverse generation task.
           (Right) A qualitative demonstration of the FC-based odel trained using $L_{DSM}$ on the data imputation task.</p>
         <p><b>Inverse Generation:</b> One characteristic of flow-based models is that $g^{-1}$ can be directly adopted as a generator In this experiment, we adopt the Glow model architecture and train it using our method with $L_{SSM}$ on the MNIST dataset. 
           We compare our visualized results with the current best flow-based model trained using the score-matching objective <a href="#Ref12">[12]</a>. The results of <a href="#Ref12">[12]</a> are generated using their officially released code with their best setup (i.e., FDSSM). 
-          As presented in Fig. 3 (a) and (b), the results generated using our model demonstrate significantly better visual quality than those of <a href="#Ref12">[12]</a>.</p>
+          As presented in <a href="#Fig3">Fig. 3</a> (a) and (b), the results generated using our model demonstrate significantly better visual quality than those of <a href="#Ref12">[12]</a>.</p>
 
         <p><b>MCMC Generation:</b> In comparison to the inverse generation method, the MCMC sampling process is more suitable for conditional generation tasks such as data imputation due to its flexibility <a href="#Ref14">[14]</a>.
           For the imputation task, a data vector $\mathbf{x}$ is separated as an observable part $\mathbf{x}_O$ and a masked part $\mathbf{x}_M$. The goal of imputation is to generate the masked part $\mathbf{x}_M$ 
@@ -366,7 +366,7 @@
           gradient of the energy function $\frac{\partial}{\partial \mathbf{x}}E(\mathbf{x}; \theta)$. Given a noise vector $\mathbf{z}$ sampled from a Gaussian distribution, 
           a small step size $\alpha$, the process iteratively updates $\mathbf{x}_M$ based on the following equation:</p>
         <p class="has-text-centered">$$\mathbf{x}^{(t+1)}_M=\mathbf{x}^{(t)}_M-\alpha \frac{\partial}{\partial \mathbf{x}^{(t)}_M}E(\mathbf{x}_O, \mathbf{x}^{(t)}_M; \theta)+\sqrt{2\alpha}\mathbf{z},$$</p>
-        <p>where $\mathbf{x}^{(t)}_M$ represents $\mathbf{x}_M$ at iteration $t \in \{1, \cdots , T\}$, and $T$ is the total number of iterations. Fig. 3 (c) and (d) depicts the imputation results of the FC-based
+        <p>where $\mathbf{x}^{(t)}_M$ represents $\mathbf{x}_M$ at iteration $t \in \{1, \cdots , T\}$, and $T$ is the total number of iterations. <a href="#Fig3">Fig. 3</a> (c) and (d) depicts the imputation results of the FC-based
           model trained using $L_{DSM}$ on the CelebA dataset ($D = 3 \times 64 \times 64$). In this example, we implement the masking part $\mathbf{x}_M$ using the data from the KMNIST and MNIST datasets.</p>
       </div>
     </div>
