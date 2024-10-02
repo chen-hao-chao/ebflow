@@ -234,7 +234,7 @@
           fields of machine learning and statistics. Given a $D$-dimensional random data vector $\mathbf{x}\in \mathbb{R}^D$, the goal
           of such a task is to estimate the true pdf $p_{\mathbf{x}}(\cdot)$ of $\mathbf{x}$ with a function $p(\cdot\,;\theta)$ parameterized by $\theta$. In the
           studies of deep unsupervised learning, the flow-based modeling method is commonly-adopted
-          for describing $p_{\mathbf{x}}(\cdot)$ due to its expressiveness and broad applicability in generative tasks [1].</p>
+          for describing $p_{\mathbf{x}}(\cdot)$ due to its expressiveness and broad applicability in generative tasks <a href="#Ref1">[1]</a>.</p>
         <p>&#9654<b>Flow-based models</b> describe $p_{\mathbf{x}}(\cdot)$ using a prior distribution $p_{\mathbf{u}}(\cdot)$ of a latent variable $\mathbf{u}\in \mathbb{R}^D$ and
           an invertible function $g=g_L \circ \cdots \circ g_1$, where $g_i:\mathbb{R}^D \to \mathbb{R}^D$, $\forall i \in \{1, \cdots ,L\}$ and is
           usually modeled as a neural network with $L$ layers. Based on the change of variable theorem and the
@@ -243,7 +243,7 @@
         <p>where $\mathbf{x}_i = g_i \circ \cdots \circ g_1(\mathbf{x}; \theta)$, $\mathbf{x}_0 = \mathbf{x}$, $\mathbf{J}_{g}(\mathbf{x};\theta) = \partial g(\mathbf{x};\theta)/\partial \mathbf{x}$ 
           represents the Jacobian of $g$ with respect to $\mathbf{x}$, and $\mathbf{J}_{g_i}(\mathbf{x}_{i-1};\theta) = \partial g_i(\mathbf{x}_{i-1};\theta)/\partial \mathbf{x}_{i-1}$ represents the Jacobian of the $i$-th layer of 
           $g$ with respect to $\mathbf{x}_{i−1}$. This work concentrates on model architectures employing both linear and non-linear transformations to construct the function $g$. Such a construction was inspired by the recent development of 
-          normalizing flows with convolution layers [2-6], fully-connected layers [7,8], and linear independent component analysis (ICA) models [8]. Let $S_l=\{i\,|\,g_i\,\text{is linear}\}$ and $S_n=\{i\,|\,g_i\,\text{is non-linear}\}$ represent the
+          normalizing flows with convolution layers <a href="#Ref2">[2-6]</a>, fully-connected layers <a href="#Ref7">[7,8]</a>, and linear independent component analysis (ICA) models <a href="#Ref9">[9]</a>. Let $S_l=\{i\,|\,g_i\,\text{is linear}\}$ and $S_n=\{i\,|\,g_i\,\text{is non-linear}\}$ represent the
           sets of indices of the linear and non-linear transformations in $g$, respectively. The pdf defined by $g$ can be further decomposed as follows:</p>
         <p class="has-text-centered">$$p(\mathbf{x};\theta) = p_{\mathbf{u}}(g(\mathbf{x};\theta)) \prod_{i\in S_n} \left| \det( \mathbf{J}_{g_i}(\mathbf{x}_{i-1};\theta)) \right| \prod_{i\in S_l} \left| \det( \mathbf{J}_{g_i}(\theta)) \right|.$$</p>
         <p>The input-independence of the Jacobian determinant product of $S_l$ holds since the transformations in $\{g_i, \forall i\in S_l\}$ are either first-degree or zero-degree polynomials, and thus their Jacobians are constant to $\mathbf{x}_{i-1}$. Previous implementations
@@ -264,8 +264,8 @@
         <p>Despite the fact that using $L_{SML}(\theta)$ prevents the calculation of $Z(\theta)$, sampling from $p(\cdot\,;\theta)$ typically requires running a Markov Chain Monte Carlo (MCMC) process until convergence, which can still be computationally expensive as it involves
           evaluating the gradients of the energy function numerous times.</p>
         <p>Another line of researches proposed to optimize $p(\cdot\,;\theta)$ through minimizing the Fisher divergence $\mathbb{D}_{F}[p_{\mathbf{x}}(\cdot) \| p(\cdot\,;\theta)]$ using the score-matching
-          (SM) [10] objective $L_{SM}(\theta)=\mathbb{E}_{p_{\mathbf{x}}(\mathbf{x})}[\frac{1}{2} \| \frac{\partial}{\partial \mathbf{x}} E(\mathbf{x};\theta) + Tr(\frac{\partial^2}{\partial \mathbf{x}^2} E(\mathbf{x};\theta)) \|^2]$ to avoid the explicit calculation of $Z(\theta)$ as well as the sampling process required in $L_{\text{SML}}(\theta)$. Several computationally
-          efficient variants of $L_{SM}(\theta)$, including sliced score matching (SSM) [11], finite difference sliced score matching (FDSSM) [12], and denoising score matching (DSM) [13], have been proposed.</p>
+          (SM) <a href="#Ref10">[10]</a> objective $L_{SM}(\theta)=\mathbb{E}_{p_{\mathbf{x}}(\mathbf{x})}[\frac{1}{2} \| \frac{\partial}{\partial \mathbf{x}} E(\mathbf{x};\theta) + Tr(\frac{\partial^2}{\partial \mathbf{x}^2} E(\mathbf{x};\theta)) \|^2]$ to avoid the explicit calculation of $Z(\theta)$ as well as the sampling process required in $L_{\text{SML}}(\theta)$. Several computationally
+          efficient variants of $L_{SM}(\theta)$, including sliced score matching (SSM) <a href="#Ref11">[11]</a>, finite difference sliced score matching (FDSSM) [12], and denoising score matching (DSM) <a href="#Ref13">[13]</a>, have been proposed.</p>
         <p><b>SSM</b> is derived directly based on $L_{SM}(\theta)$ with an unbiased Hutchinson’s trace estimator. Given a random projection vector $\mathbf{v}\in \mathbb{R}^D$ drawn from $p_\mathbf{v}$ and satisfying $\mathbb{E}_{p_{\mathbf{v}}(\mathbf{v})}[\mathbf{v}^T \mathbf{v}] = I$, the objective
           function denoted as $L_{SSM}(\theta)$, is defined as follows:</p>
         <p class="has-text-centered">$$L_{SSM}(\theta)=\mathbb{E}_{p_{\mathbf{x}}(\mathbf{x})} \left[\frac{1}{2} \left\| \frac{\partial}{\partial \mathbf{x}} E(\mathbf{x};\theta) + \mathbf{v}^T\frac{\partial^2}{\partial \mathbf{x}^2} E(\mathbf{x};\theta)\mathbf{v} \right\|^2\right].$$</p>
@@ -299,7 +299,7 @@
           As a result, modern architectures such as Glow and NSF can be optimized efficiently without constraints (e.g., masking) on their linear layers.</p>
         <p>&#9654<b>Inference Cost:</b> Although the computational cost of evaluating the exact Jacobian determinants still requires $O(D^3L)$ time, these operations can be computed only once after training and reused for subsequent inferences,
           since both $Z(\theta)$ and the inverse matrices of the linear layers are constants as long as $\theta$ is fixed. In cases where $D$ is extremely large and $Z(\theta)$ cannot be explicitly calculated, stochastic estimators such as the importance sampling techniques can be used as an alternative to approximate $Z(\theta)$.</p>
-        <p>&#9654<b>Asymptotic Convergence Property:</b> Similar to maximum likelihood training, score-matching methods that minimize Fisher divergence have theoretical guarantees on their <i style="font-style: italic;">consistency</i> [11]. This
+        <p>&#9654<b>Asymptotic Convergence Property:</b> Similar to maximum likelihood training, score-matching methods that minimize Fisher divergence have theoretical guarantees on their <i style="font-style: italic;">consistency</i> <a href="#Ref11">[11]</a>. This
           property is essential in ensuring the convergence accuracy of the parameters. Let $N$ be the number of independent and identically distributed (i.i.d.) samples drawn from $p_{\mathbf{x}}$ to approximate the
           expectation in the SM objective. In addition, assume that there exists a set of optimal parameters $\theta^{*}$ such that $p(\mathbf{x}; \theta^{*}) = p_{\mathbf{x}}(\mathbf{x})$. Under some regularity conditions, 
           <i style="font-style: italic;">consistency</i> guarantees that the parameters $\theta_N$ minimizing the SM loss converges (in probability) to its optimal value $\theta^{*}$ when $N \to \infty$, i.e., $\theta_N \to \theta^{*}$ as $N\to \infty$.</p>
@@ -354,13 +354,13 @@
         <p>&#9654<b>Application to Generation Tasks:</b> The sampling process of EBFlow can be accomplished through the inverse function or an MCMC process. The former is a typical generation method adopted by flow-based models, while the latter is
           a more flexible sampling process that allows conditional generation without re-training the model. In the following paragraphs, we provide detailed explanations and visualized results of these tasks</p>
         <p class="has-text-centered" style="font-style: italic;text-align: center;"><img src="./static/images/gen_samples.png" style="width:600pt;"/></br>
-          <b>Figure 3.</b> (Left) A qualitative comparison between (a) our model (NLL=728) and (b) the model in [12] (NLL=1,637) on the inverse generation task.
+          <b>Figure 3.</b> (Left) A qualitative comparison between (a) our model (NLL=728) and (b) the model in <a href="#Ref12">[12]</a> (NLL=1,637) on the inverse generation task.
           (Right) A qualitative demonstration of the FC-based odel trained using $L_{DSM}$ on the data imputation task.</p>
         <p><b>Inverse Generation:</b> One characteristic of flow-based models is that $g^{-1}$ can be directly adopted as a generator In this experiment, we adopt the Glow model architecture and train it using our method with $L_{SSM}$ on the MNIST dataset. 
-          We compare our visualized results with the current best flow-based model trained using the score-matching objective [12]. The results of [12] are generated using their officially released code with their best setup (i.e., FDSSM). 
-          As presented in Fig. 3 (a) and (b), the results generated using our model demonstrate significantly better visual quality than those of [12].</p>
+          We compare our visualized results with the current best flow-based model trained using the score-matching objective <a href="#Ref12">[12]</a>. The results of <a href="#Ref12">[12]</a> are generated using their officially released code with their best setup (i.e., FDSSM). 
+          As presented in Fig. 3 (a) and (b), the results generated using our model demonstrate significantly better visual quality than those of <a href="#Ref12">[12]</a>.</p>
 
-        <p><b>MCMC Generation:</b> In comparison to the inverse generation method, the MCMC sampling process is more suitable for conditional generation tasks such as data imputation due to its flexibility [14].
+        <p><b>MCMC Generation:</b> In comparison to the inverse generation method, the MCMC sampling process is more suitable for conditional generation tasks such as data imputation due to its flexibility <a href="#Ref14">[14]</a>.
           For the imputation task, a data vector $\mathbf{x}$ is separated as an observable part $\mathbf{x}_O$ and a masked part $\mathbf{x}_M$. The goal of imputation is to generate the masked part $\mathbf{x}_M$ 
           based on the observable part $\mathbf{x}_O$. To achieve this goal, one can perform a Langevin MCMC process to update $\mathbf{x}_M$ according to the
           gradient of the energy function $\frac{\partial}{\partial \mathbf{x}}E(\mathbf{x}; \theta)$. Given a noise vector $\mathbf{z}$ sampled from a Gaussian distribution, 
@@ -386,13 +386,13 @@
         <p>For example, let $S_n=\phi$, $S_l$ be a set with a single element, and $W$ be the weight matrix of the linear transformation. We have:</p>
         <p class="has-text-centered">$$\left| \det( \mathbf{W}) \right|^{-1}=\mathbb{E}_{q(\mathbf{x}')}\left[ \frac{p_{\mathbf{u}}(\mathbf{W}\mathbf{x}')}{q(\mathbf{x}')} \right]\approx \frac{1}{M}\sum_{k=1}^M \frac{p_{\mathbf{u}}(\mathbf{W}\mathbf{x}^{(k)}) }{q(\mathbf{x}^{(k)})}.$$</p>
         <p>where $\{\mathbf{x}^{(k)}\}_{k=1}^M$ are a set of i.i.d. samples drawn from $q$. Typically, the computational cost of the determinant is $O(D^3L)$. With this formula, its value can be estimated with complexity $O(D^2M)$ and the overall computation is parallelizable.</p>
-        <p>This estimation method can be interpreted as a generalization of the stochastic estimator presented in [15], where
+        <p>This estimation method can be interpreted as a generalization of the stochastic estimator presented in <a href="#Ref15">[15]</a>, where
           the distributions $p_{\mathbf{u}}$ and $q$ are both modeled as isotropic Gaussian distributions, and $g$ is restricted as
           a linear transformation. For the further analysis of this concept, particularly in the context of
-          determinant estimation for matrices, we refer readers to Section I of [15], where a more sophisticated
+          determinant estimation for matrices, we refer readers to Section I of <a href="#Ref15">[15]</a>, where a more sophisticated
           approximation approach and the corresponding experimental findings are provided.</p>
 
-        <p>&#9654<b>Reinforcement Learning:</b> Our extension research <a href="https://arxiv.org/abs/2405.13629">Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow</a> [16] shows that EBFlow can be applied in the Soft Actor-Critic (SAC) [17] framework to model the reinforcement learning (RL) agent.
+        <p>&#9654<b>Reinforcement Learning:</b> Our extension research <a href="https://arxiv.org/abs/2405.13629">Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow</a> <a href="#Ref16">[16]</a> shows that EBFlow can be applied in the Soft Actor-Critic (SAC) <a href="#Ref17">[17]</a> framework to model the reinforcement learning (RL) agent.
           In this work, we introduce a new Maximum Entropy (MaxEnt) RL framework modeled as follows:</p>
         <p class="has-text-centered">$$\pi(\mathbf{a}|\mathbf{s})=p_{\mathbf{u}}(g_{\theta}(\mathbf{a}|\mathbf{s})) \prod_{i\in S_n} \left| \det( \mathbf{J}_{g^i_{\theta}}(\mathbf{a}^{i-1}|\mathbf{s})) \right| \prod_{i\in S_l} \left| \det( \mathbf{J}_{g^i_{\theta}}(\mathbf{s})) \right| \triangleq \exp \left(\frac{1}{\alpha} Q_{\theta}(\mathbf{s},\mathbf{a})\right) \exp \left(\frac{1}{\alpha} V_{\theta}(\mathbf{s})\right).$$</p>
         <p>This framework integrates the policy evaluation steps and the policy improvement steps,
@@ -417,48 +417,48 @@
 <section class="section" id="reference">
   <div class="container is-max-desktop content">
     <h2 class="title">References</h2>
-    <p>[1] G. Papamakarios, E. T. Nalisnick, D. J. Rezende, S. Mohamed, and B. Lakshminarayanan.
+    <p id="Ref1">[1] G. Papamakarios, E. T. Nalisnick, D. J. Rezende, S. Mohamed, and B. Lakshminarayanan.
       Normalizing Flows for Probabilistic Modeling and Inference. Journal of Machine Learning
       Research (JMLR), 22:57:1–57:64, 2019.</p>
-    <p>[2] D. P. Kingma and P. Dhariwal. Glow: Generative Flow with Invertible 1x1 Convolutions.
+    <p id="Ref2">[2] D. P. Kingma and P. Dhariwal. Glow: Generative Flow with Invertible 1x1 Convolutions.
       Proceedings of the International Conference on Neural Information Processing Systems
       (NeurIPS), 2018.</p>
-    <p>[3] E. Hoogeboom, R. van den Berg, and M. Welling. Emerging Convolutions for
+    <p id="Ref3">[3] E. Hoogeboom, R. van den Berg, and M. Welling. Emerging Convolutions for
       Generative Normalizing Flows. Proceedings of the International Conference on Machine
       Learning (ICML), 2019.</p>
-    <p>[4] X. Ma and E. H. Hovy. MaCow: Masked Convolutional Generative Flow. Proceedings
+    <p id="Ref4">[4] X. Ma and E. H. Hovy. MaCow: Masked Convolutional Generative Flow. Proceedings
       of the International Conference on Neural Information Processing Systems (NeurIPS), 2019.</p>
-    <p>[5] Y. Lu and B. Huang. Woodbury Transformations for Deep Generative Flows. Proceedings
+    <p id="Ref5">[5] Y. Lu and B. Huang. Woodbury Transformations for Deep Generative Flows. Proceedings
       of the International Conference on Neural Information Processing Systems (NeurIPS), 2020.</p>
-    <p>[6] C. Meng, L. Zhou, K. Choi, T. Dao, and S. Ermon. ButterflyFlow: Building
+    <p id="Ref6">[6] C. Meng, L. Zhou, K. Choi, T. Dao, and S. Ermon. ButterflyFlow: Building
       Invertible Layers with Butterfly Matrices. Proceedings of the International Conference on
       Machine Learning (ICML), 2022.</p>
-    <p>[7] L. Gresele, G. Fissore, A. Javaloy, B. Schölkopf, and A. Hyvärinen. Relative Gradient Optimization
+    <p id="Ref7">[7] L. Gresele, G. Fissore, A. Javaloy, B. Schölkopf, and A. Hyvärinen. Relative Gradient Optimization
       of the Jacobian Term in Unsupervised Deep Learning. In Proceedings of the Conference on
       Neural Information Processing Systems (NeurIPS), 2020.</p>
-    <p>[8] T. Anderson Keller, Jorn W. T. Peters, Priyank Jaini, Emiel Hoogeboom, Patrick Forr’e, and
+    <p id="Ref8">[8] T. Anderson Keller, Jorn W. T. Peters, Priyank Jaini, Emiel Hoogeboom, Patrick Forr’e, and
       Max Welling. Self Normalizing Flows. In Proceedings of the International Conference on
       Machine Learning (ICML), 2020.</p>
-    <p>[9] A. Hyvärinen and E. Oja. Independent Component Analysis: Algorithms and Applications.
+    <p id="Ref9">[9] A. Hyvärinen and E. Oja. Independent Component Analysis: Algorithms and Applications.
       Neural Networks: the Official Journal of the International Neural Network Society, 13 4-5:
       411-30, 2000.</p>
-    <p>[10] A. Hyvärinen. Estimation of Non-Normalized Statistical Models by Score Matching. Journal
+    <p id="Ref10">[10] A. Hyvärinen. Estimation of Non-Normalized Statistical Models by Score Matching. Journal
       of Machine Learning Research (JMLR), 6(24):695-709, 2005.</p>
-    <p>[11] Y. Song, S. Garg, J. Shi, and S. Ermon. Sliced Score Matching: A Scalable Approach to Density
+    <p id="Ref11">[11] Y. Song, S. Garg, J. Shi, and S. Ermon. Sliced Score Matching: A Scalable Approach to Density
       and Score Estimation. In Proc. Conf. on Uncertainty in Artificial Intelligence (UAI), 2019.</p>
-    <p>[12] T. Pang, K. Xu, C. Li, Y. Song, S. Ermon, and J. Zhu. Efficient Learning of Generative Models
+    <p id="Ref12">[12] T. Pang, K. Xu, C. Li, Y. Song, S. Ermon, and J. Zhu. Efficient Learning of Generative Models
       via Finite-Difference Score Matching. In Proc. Conf. on Neural Information Processing Systems
       (NeurIPS), 2020.</p>
-    <p>[13] P. Vincent. A Connection between Score Matching and Denoising Autoencoders. Neural
+    <p id="Ref13">[13] P. Vincent. A Connection between Score Matching and Denoising Autoencoders. Neural
       computation, 23(7):1661-1674, 2011.</p>
-    <p>[14] A. M Nguyen, J. Clune, Y. Bengio, A. Dosovitskiy, and J. Yosinski. Plug & Play Generative
+    <p id="Ref14">[14] A. M Nguyen, J. Clune, Y. Bengio, A. Dosovitskiy, and J. Yosinski. Plug & Play Generative
       Networks: Conditional Iterative Generation of Images in Latent Space. In Proc. Int. Conf. on
       Computer Vision and Pattern Recognition (CVPR), 2016.</p>
-    <p>[15] J. Sohl-Dickstein. Two Equalities Expressing the Determinant of a Matrix in terms of Expectations
+    <p id="Ref15">[15] J. Sohl-Dickstein. Two Equalities Expressing the Determinant of a Matrix in terms of Expectations
       over Matrix-Vector Products, 2020.</p>
-    <p>[16] C.-H. Chao, C. Feng, W.-F. Sun, C.-K. Lee, S. See, C.-Y. Lee. Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow. In Proc. Conf. on Neural Information Processing Systems
+    <p id="Ref16">[16] C.-H. Chao, C. Feng, W.-F. Sun, C.-K. Lee, S. See, C.-Y. Lee. Maximum Entropy Reinforcement Learning via Energy-Based Normalizing Flow. In Proc. Conf. on Neural Information Processing Systems
       (NeurIPS), 2024.</p>
-    <p>[17] T. Haarnoja, A. Zhou, P. Abbeel, and S. Levine. Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. In Proceedings of
+    <p id="Ref17">[17] T. Haarnoja, A. Zhou, P. Abbeel, and S. Levine. Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. In Proceedings of
         the International Conference on Machine Learning (ICML), 2017.</p>
   </div>
 </section>
