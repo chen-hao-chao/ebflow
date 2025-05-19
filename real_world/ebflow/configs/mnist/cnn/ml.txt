@@ -30,5 +30,6 @@
     "logit_smoothness": 0.75,
     "restore_path": "",
     "resultdir": "results",
-    "workdir": "mnist_cnn_ml"
+    "workdir": "mnist_cnn_ml",
+    "eval_only": 0
 }

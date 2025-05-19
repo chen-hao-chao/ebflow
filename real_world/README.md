@@ -65,6 +65,29 @@ ebflow --config {$(1)} --loss {$(2)} --restore_path {$(3)}
   
   > Download CelebA dataset through [\[link\]](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html).
 
+### Evaluation
+#### Pretrained Weights
+|  Dataset |  Loss   | Checkpoint       |  Dataset |  Loss   | Checkpoint       | 
+| -------- | ------- | ---------------- | -------- | ------- | ---------------- |
+| MNIST    |  ML     | [FC](https://drive.google.com/file/d/1KPhLou3InM1e3-8oqUZjqegqNmf-U42z/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1HhHigOr_UWteIJHNOPf7g-06SkGcMuMn/view?usp=sharing) | CIFAR-10 |  ML     | [FC](https://drive.google.com/file/d/1Po1wXpb921NhQgXCUc2WzHRaV6kHE6ha/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1ycCMu8nayXQwXeEXa_27fKkVX7X4G5gs/view?usp=sharing) |
+| MNIST    |  SML    | [FC](https://drive.google.com/file/d/1wTp8DFhA-4gjd2LGNU4kg4vpnMahJgw-/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1CoEGdkJMMiJVBk8pVcakhP_C3d0xQIU_/view?usp=sharing) | CIFAR-10 |  SML    | [FC](https://drive.google.com/file/d/1cDJXBoG7B1zrVq9ofFxWb5IKF0n_bdkr/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1nMDIkJgbq2SqwlS9Yi-dpKdHk45WO1Q8/view?usp=sharing) |
+| MNIST    |  DSM    | [FC](https://drive.google.com/file/d/1OsKx6_B99eOl1mGppVEEh591mkRQt6dB/view?usp=sharing) / [CNN](https://drive.google.com/drive/folders/1LkEHlPqlfFs1gG4LosPwPHFWTH48RM2h?usp=sharing) | CIFAR-10 |  DSM    | [FC](https://drive.google.com/file/d/19lZNDGRWjX_h57G3ej4H29qt6Gkk3EnM/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1pRTlleJyBLKsHfljXIMu2Qxdj7tR5f2I/view?usp=sharing) |
+| MNIST    |  SSM    | [FC](https://drive.google.com/file/d/1InG1sZqFQ9omaL58aSXIOfl5wTGiZG4o/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1KvhYWvATepdUFNS7Jle8jktFH9k4_LwV/view?usp=sharing) | CIFAR-10 |  SSM    | [FC](https://drive.google.com/file/d/1wN07woXex2H-sGS3PjKL8uKjolm8PiCg/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1AHBJ1ehytxNlCrEV-YDW2TOLyyZjdBIc/view?usp=sharing) |
+| MNIST    |  FDSSM  | [FC](https://drive.google.com/file/d/1ZLJqhSAV8ix2H0DeprOY744D8wSjw9yb/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1RGqEUxNHMjFxRpk6YLUn-0ILkeSqJ0t-/view?usp=sharing) | CIFAR-10 |  FDSSM  | [FC](https://drive.google.com/file/d/1kA5HIzjNlkb9KvsqBiQMNIY-j0FnimbG/view?usp=sharing) / [CNN](https://drive.google.com/file/d/1ycCMu8nayXQwXeEXa_27fKkVX7X4G5gs/view?usp=sharing) |
+
+- Download the files using `gdown`
+```
+pip install gdown
+gdown <file_id>
+```
+> `<file_id>` can be obtained from the url, e.g., `https://drive.google.com/file/d/<file_id>/view?usp=drive_link`.
+
+#### Evaluating NLL
+  - Evaluate the NLL of EBFlow trained with the CNN-based architecture and DSM on CIFAR-10.
+  ```
+  ebflow --config 'cifar_cnn' --loss 'dsm' --eval_only --restore_path <path_to_pretrained_weight>
+  ```
+
 ### Details about the Code Implementation
 - Models are built using the `FlowSequential` module (i.e. `ebflow/layers/flowsequential.py`). Each `FlowSequential` module contains a number of flow layers (i.e., `FlowLayer` and `LinearFlowLayer`), and has the following functions: *forward*, *reverse*, *log_prob*, *sample*.
 - All of the flow layers belong to either `FlowLayer` or `LinearFlowLayer`. Layers with **constant Jacobians** are categorized as `LinearFlowLayer`, while the others are categorized as `FlowLayer`.

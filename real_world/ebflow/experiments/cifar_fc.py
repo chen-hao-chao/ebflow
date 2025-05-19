@@ -16,6 +16,8 @@ def main(args):
 
     # Disable MaP
     config['MaP'] = 0 if args.withoutMaP else 1
+    # Disable eval_only mode
+    config['eval_only'] = 1 if args.eval_only else 0
 
     # Data loaders
     train_loader, val_loader, test_loader = load_data(data_aug=bool(config['data_aug']), batch_size=config['batch_size'])
@@ -35,6 +37,20 @@ def main(args):
         ema = ExponentialMovingAverage(model.parameters(), decay=config['ema_decay'])
     else:
         ema = None
+    
+    if config['eval_only'] == 1:
+        # Load the model's weights from 'restore_path'
+        config['restore_path'] = args.restore_path
+        
+        if config['restore_path'] is not '':
+            checkpoint = torch.load(config['restore_path'])
+            model.load_state_dict(checkpoint['model_state_dict'])
+            ema.load_state_dict(checkpoint['ema'])
+        else:
+            print("ERROR")
+            assert False
+        
+        ema.copy_to(model.parameters())
 
     # Optimizer
     optimizer = torch.optim.RMSprop(model.parameters(),

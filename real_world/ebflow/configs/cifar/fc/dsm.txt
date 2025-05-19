@@ -27,5 +27,6 @@
     "logit_smoothness": 0.5,
     "restore_path": "",
     "resultdir": "results",
-    "workdir": "cifar_fc_dsm"
+    "workdir": "cifar_fc_dsm",
+    "eval_only": 0
 }

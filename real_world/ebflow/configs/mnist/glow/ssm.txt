@@ -25,5 +25,6 @@
     "logit_smoothness": 1.0,
     "restore_path": "",
     "resultdir": "results",
-    "workdir": "mnist_glow_ssm"
+    "workdir": "mnist_glow_ssm",
+    "eval_only": 0,
 }

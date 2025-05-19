@@ -27,5 +27,6 @@
     "logit_smoothness": 0.5,
     "restore_path": "",
     "resultdir": "results",
-    "workdir": "mnist_fc_fdssm"
+    "workdir": "mnist_fc_fdssm",
+    "eval_only": 0
 }

@@ -69,7 +69,6 @@ class Experiment:
         # Evaluate before training
         # ------------
         val_logpx = self.eval_epoch(self.val_loader)
-        val_logpx = val_logpx if val_logpx<500 else 500
         self.log('Val LogPx', val_logpx)
         self.log('Val BPD', self.to_bpd(val_logpx))
         writer.add_scalar("val_logp", val_logpx, 0)
@@ -85,6 +84,9 @@ class Experiment:
             self.update_summary('Test BPD', self.to_bpd(test_logpx))
             writer.add_scalar("test_logp", test_logpx, 0)
             writer.add_scalar("test_logp_bpd", self.to_bpd(test_logpx), 0)
+
+        if self.config['eval_only']:
+            return
         # ------------
 
         for e in range(self.summary['Epoch'] + 1, self.config['epochs'] + 1):
